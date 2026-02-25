@@ -19,8 +19,6 @@ How we can do Agent discovery depending on the tentent id.
 
 How to create agent cards and call these agents using the A2A client.
 
-```
-
 ## Setup
 
 ### 1. Git clone it
