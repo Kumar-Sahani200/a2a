@@ -3,7 +3,8 @@ from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
-from starlette.routing import Mount
+from starlette.requests import Request
+from starlette.routing import Mount, Route
 
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.request_handlers import DefaultRequestHandler
@@ -33,6 +34,29 @@ class TenantMiddleware(BaseHTTPMiddleware):
             )
             
         return await call_next(request)
+
+
+async def discovery(request: Request):
+    """
+    Returns available agents for the calling tenant.
+    """
+    tenant = request.headers.get("x-tenant-id", "guest")
+    
+    agents = [
+        {"name": "Greeting Agent", "path": "/greeting"},
+        {"name": "Math Agent", "path": "/math"},
+    ]
+    
+    filtered_agents = []
+    for agent in agents:
+        if tenant == "redhat" and agent["path"] == "/math":
+            continue
+        filtered_agents.append(agent)
+        
+    return JSONResponse({
+        "tenant": tenant,
+        "available_agents": filtered_agents
+    })
 
 
 def create_greeting_app():
@@ -89,6 +113,7 @@ def create_math_app():
 middleware = [Middleware(TenantMiddleware)]
 app = Starlette(
     routes=[
+        Route("/discovery", discovery),
         Mount("/greeting", app=create_greeting_app().build()),
         Mount("/math", app=create_math_app().build()),
     ],
@@ -97,6 +122,7 @@ app = Starlette(
 
 if __name__ == "__main__":
     print("Starting Agent Hub on http://localhost:8000")
+    print("Discovery endpoint at /discovery")
     print("Greeting Agent at /greeting")
     print("Math Agent at /math")
     uvicorn.run(app, host="0.0.0.0", port=8000)
