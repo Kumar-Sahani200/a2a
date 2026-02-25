@@ -16,39 +16,27 @@ PUBLIC_AGENT_CARD_PATH = "/.well-known/agent.json"
 BASE_URL = "http://localhost:9999"
 
 
-async def main() -> None:
+async def call_agent(base_url: str, message_text: str):
     async with httpx.AsyncClient() as httpx_client:
-        # Initialize A2ACardResolver
         resolver = A2ACardResolver(
             httpx_client=httpx_client,
-            base_url=BASE_URL,
+            base_url=base_url,
         )
 
-        final_agent_card_to_use: AgentCard | None = None
-
+        print(f"\n--- Interacting with agent at {base_url} ---")
         try:
-            print(
-                f"Fetching public agent card from: {BASE_URL}{PUBLIC_AGENT_CARD_PATH}"
-            )
-            _public_card = await resolver.get_agent_card()
-            print("Fetched public agent card")
-            print(_public_card.model_dump_json(indent=2))
-
-            final_agent_card_to_use = _public_card
-
+            agent_card = await resolver.get_agent_card()
+            print(f"Fetched card for: {agent_card.name}")
         except Exception as e:
-            print(f"Error fetching public agent card: {e}")
-            raise RuntimeError("Failed to fetch public agent card")
+            print(f"Error fetching agent card from {base_url}: {e}")
+            return
 
-        client = A2AClient(
-            httpx_client=httpx_client, agent_card=final_agent_card_to_use
-        )
-        print("A2AClient initialized")
-
+        client = A2AClient(httpx_client=httpx_client, agent_card=agent_card)
+        
         message_payload = Message(
             role=Role.user,
             messageId=str(uuid.uuid4()),
-            parts=[Part(root=TextPart(text="Hello, how are you?"))],
+            parts=[Part(root=TextPart(text=message_text))],
         )
         request = SendMessageRequest(
             id=str(uuid.uuid4()),
@@ -56,11 +44,17 @@ async def main() -> None:
                 message=message_payload,
             ),
         )
-        print("Sending message")
-
+        
+        print(f"Sending message: '{message_text}'")
         response = await client.send_message(request)
         print("Response:")
         print(response.model_dump_json(indent=2))
+
+
+async def main() -> None:
+    # Use different messages for different agents to see their unique responses
+    await call_agent("http://localhost:9999", "Hello!")
+    await call_agent("http://localhost:9998", "What is 1+1?")
 
 
 if __name__ == "__main__":
