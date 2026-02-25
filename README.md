@@ -1,19 +1,37 @@
-# A2A SDK Demo Projects
-This repository contains example projects demonstrating the capabilities of the Agent-to-Agent (A2A) SDK. Each sub-directory is a self-contained project with its own dependencies and instructions.
+# A2A Multi Agent Project
 
-## Projects
+Hi there! I'm Kumar, this project is to multi agent demo using a2a sdk.
+I haven't used any llm invocation here, no AI agents in particular but my purpose was to implement how to implement A2A protocal
 
-### 1. Simple A2A Agent (`a2a-simple-example/`)
+## Purpose
 
-This project provides a basic example of the A2A SDK. It contains a single agent and a test client that invokes it. This is a great starting point for understanding the fundamental concepts of creating and interacting with an A2A agent.
+This project is to demonstrate how to implement A2A protocal in a multi agent system.
+How we can do Agent discovery depending on the tentent id.
+How to create agent cards and call these agents using the A2A client.
 
-**>> For setup and run instructions, see the [Simple A2A Agent README](./a2a-simple-example/README.md).**
+## Setup
 
-### 2. Multi-Agent Demo using llm (`a2a_real_llm/`)
+### 1. Git clone it
 
-This is a more advanced example showcasing a multi-agent system. It demonstrates how a "host" agent can orchestrate a conversation between two other agents, - the order agent and the product agent. This project is ideal for learning about multi-agent orchestration and communication.
+```bash
+git clone https://github.com/Kumar-Sahani200/a2a.git
+```
 
+### 2. Install dependencies
 
-## References
-- https://github.com/google/a2a-python
-- https://github.com/google-a2a/a2a-samples/tree/main
+```bash
+cd a2a
+uv sync
+```
+
+### 3. Run the server
+
+```bash
+uv run __main__.py
+```
+
+### 4. Run the client(in another terminal)
+
+```bash
+uv run test_client.py
+```
