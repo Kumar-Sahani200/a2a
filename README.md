@@ -1,13 +1,25 @@
 # A2A Multi Agent Project
 
+```
 Hi there! I'm Kumar, this project is to multi agent demo using a2a sdk.
+```
+
 I haven't used any llm invocation here, no AI agents in particular but my purpose was to implement how to implement A2A protocal
 
 ## Purpose
 
-This project is to demonstrate how to implement A2A protocal in a multi agent system.
+```markdown
+This project is to demonstrate how to implement the A2A protocol in a multi-agent system.
+```
+
+```
 How we can do Agent discovery depending on the tentent id.
+
+```
+
 How to create agent cards and call these agents using the A2A client.
+
+```
 
 ## Setup
 
