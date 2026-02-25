@@ -1,7 +1,7 @@
 # A2A Multi Agent Project
 
 ```
-Hi there! I'm Kumar, this project is to multi agent demo using a2a sdk.
+Hi there! I'm Kumar, this project is to show a multi agent demo using a2a sdk.
 ```
 
 I haven't used any llm invocation here, no AI agents in particular but my purpose was to implement how to implement A2A protocal
